@@ -1,2 +1,2 @@
 # discordBot
-#Kirkland and Soc's Project of Love <3
+#Kirkland and Kirklands Project of Love </3
