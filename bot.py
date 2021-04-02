@@ -3,6 +3,17 @@
 import os
 import random
 
+#https://discordpy.readthedocs.io/en/latest/logging.html
+import logging
+logger = logging.getLogger('discord')
+logger.setLevel(logging.WARNING)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
+import aiohttp
+import asyncio
+
 import discord
 from dotenv import load_dotenv
 
@@ -26,8 +37,28 @@ async def showHelp(message):
        await message.channel.send(i)
 
 async def showWeather(message):
-    await message.channel.send(i)
-    # http://wttr.in/detroit
+    # create an empty string to hold the weather report
+    weather = ""
+    headers = {'content-type': 'text/plain'}
+    async with aiohttp.ClientSession() as session:
+        weatherBaseURL = 'http://wttr.in/detroit?T'
+        # gather the full weather rport, split it line by line then just grab the first 6 lines
+        async with session.get(weatherBaseURL,headers=headers) as resp:
+            fullWeatherReport = await resp.text()
+            split = fullWeatherReport.splitlines()
+            count = 0
+            for i in split:
+                # print (i)
+                # this is the same as weather = weather + i in case I forget cuz I'm dumb
+                weather += i
+                weather += "\n"
+                count += 1
+                if count > 6:
+                    break
+            #print(weather)
+
+    await message.channel.send(weather)
+
 
 @client.event
 async def on_ready():
@@ -68,6 +99,9 @@ async def on_message(message):
     if message.content == '!help':
        await showHelp(message)
 
+    if message.content == '!weather':
+        await showWeather(message)
 
+logger.warning('hi')
 client.run(TOKEN)
 
