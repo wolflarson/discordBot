@@ -11,15 +11,23 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = "iojumper"
 client = discord.Client()
 
-def hi():
-	"""this is a function"""
-	return "hi"
+async def gg(message):
+	"""this function returns gg"""
+	await message.channel.send("gg")
 
-def showHelp():
-    help = "currently supported commands are.\n
-    !gg   - returns hi\n
-    !help - shows this help message"
-    return help
+async def showHelp(message):
+    helpArray = [
+    "currently supported commands are.",
+    "!gg   - returns gg",
+    "!weather - takes a city name as input (default Detroit), returns the forcast",
+    "!help - shows this help message"
+    ]
+    for i in helpArray:
+       await message.channel.send(i)
+
+async def showWeather(message):
+    await message.channel.send(i)
+    # http://wttr.in/detroit
 
 @client.event
 async def on_ready():
@@ -54,11 +62,12 @@ async def on_message(message):
         await message.channel.send(response)
 
     if message.content == '!gg':
-        response = hi()
-        await message.channel.send(response)
+        await gg(message)
+
 
     if message.content == '!help':
-        response = showHelp()
-        await message.channel.send(response)
+       await showHelp(message)
+
 
 client.run(TOKEN)
+
