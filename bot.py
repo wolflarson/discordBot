@@ -38,29 +38,27 @@ async def showHelp(message):
 
 async def showWeather(message):
     # check if a city is set
-    print(message.content)
     messageList = message.content.split(" ")
-    print(message.content)
-    print(messageList)
     isCitySet = len(messageList)
-    print(isCitySet)
+    logger.info("message length is " + str(isCitySet))
     if isCitySet > 1:
         city = message.content.split(" ")[1]
+        logger.info("city set to" + city)
     else:
         city = "detroit"
+        logger.info("city set to" + city)
 
     # create an empty string to hold the weather report
     weather = ""
     headers = {'content-type': 'text/plain'}
     async with aiohttp.ClientSession() as session:
-        weatherBaseURL = 'http://wttr.in/detroit?T'
+        weatherBaseURL = "http://wttr.in/" + str(city) + "?T"
         # gather the full weather rport, split it line by line then just grab the first 6 lines
         async with session.get(weatherBaseURL,headers=headers) as resp:
             fullWeatherReport = await resp.text()
             split = fullWeatherReport.splitlines()
             count = 0
             for i in split:
-                # print (i)
                 # this is the same as weather = weather + i in case I forget cuz I'm dumb
                 weather += i
                 weather += "\n"
@@ -94,11 +92,10 @@ async def on_message(message):
     if message.content == '!gg':
         await gg(message)
 
-
     if message.content == '!help':
        await showHelp(message)
 
-    if message.content == '!weather':
+    if message.content.startswith( '!weather' ):
         await showWeather(message)
 
 
