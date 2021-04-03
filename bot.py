@@ -35,11 +35,12 @@ async def sendJoke(message):
     await message.channel.send(getJokeAsJSON["value"])
 
 async def showHelp(message):
+    # this list should be alphabetical
     help = '''currently supported commands are.
     !gg   - returns gg
-    !weather - takes a city name as input (default Detroit), returns the forcast
     !help - shows this help message
     !joke - A joke! lol!
+    !weather - takes a city name as input (default Detroit), returns the forcast
     '''
     await message.channel.send(help)
 
