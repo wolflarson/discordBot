@@ -2,6 +2,9 @@
 
 import os
 import random
+import json
+import aiohttp
+import asyncio
 
 #https://discordpy.readthedocs.io/en/latest/logging.html
 import logging
@@ -10,9 +13,6 @@ logger.setLevel(logging.WARNING)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
-
-import aiohttp
-import asyncio
 
 import discord
 from dotenv import load_dotenv
@@ -23,20 +23,29 @@ GUILD = "iojumper"
 client = discord.Client()
 
 async def gg(message):
-	"""this function returns gg"""
-	await message.channel.send("gg")
+	await message.channel.send("gg no re")
+
+async def sendJoke(message):
+    async with aiohttp.ClientSession() as session:
+        jokeBaseURL = "https://api.chucknorris.io/jokes/random"
+        async with session.get(jokeBaseURL) as resp:
+            getJokeObject = await resp.text()
+            getJokeAsJSON = json.loads(getJokeObject)
+
+    await message.channel.send(getJokeAsJSON["value"])
 
 async def showHelp(message):
     helpArray = [
     "currently supported commands are.",
     "!gg   - returns gg",
     "!weather - takes a city name as input (default Detroit), returns the forcast",
-    "!help - shows this help message"
+    "!help - shows this help message",
+    "!joke - A joke! lol!"
     ]
     for i in helpArray:
        await message.channel.send(i)
 
-async def showWeather(message):
+async def sendWeather(message):
     # check if a city is set
     messageList = message.content.split(" ")
     isCitySet = len(messageList)
@@ -65,8 +74,6 @@ async def showWeather(message):
                 count += 1
                 if count > 6:
                     break
-            #print(weather)
-
     await message.channel.send(weather)
 
 
@@ -96,9 +103,10 @@ async def on_message(message):
        await showHelp(message)
 
     if message.content.startswith( '!weather' ):
-        await showWeather(message)
+        await sendWeather(message)
 
+    if message.content.startswith( '!joke' ):
+        await sendJoke(message)
 
 logger.warning('hi')
 client.run(TOKEN)
-
