@@ -9,7 +9,7 @@ import asyncio
 #https://discordpy.readthedocs.io/en/latest/logging.html
 import logging
 logger = logging.getLogger('discord')
-logger.setLevel(logging.WARNING)
+logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
@@ -95,15 +95,19 @@ async def on_message(message):
         return
 
     if message.content == '!gg':
+        logger.info(str(message.author) + " is running !gg")
         await gg(message)
 
     if message.content == '!help':
-       await showHelp(message)
+        logger.info(str(message.author) + " is running !help")
+        await showHelp(message)
 
     if message.content.startswith( '!weather' ):
+        logger.info(str(message.author) + " is running !weather")
         await sendWeather(message)
 
     if message.content.startswith( '!joke' ):
+        logger.info(str(message.author) + " is running !joke")
         await sendJoke(message)
 
 logger.warning('hi')
