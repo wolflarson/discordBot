@@ -35,15 +35,13 @@ async def sendJoke(message):
     await message.channel.send(getJokeAsJSON["value"])
 
 async def showHelp(message):
-    helpArray = [
-    "currently supported commands are.",
-    "!gg   - returns gg",
-    "!weather - takes a city name as input (default Detroit), returns the forcast",
-    "!help - shows this help message",
-    "!joke - A joke! lol!"
-    ]
-    for i in helpArray:
-       await message.channel.send(i)
+    help = '''currently supported commands are.
+    !gg   - returns gg
+    !weather - takes a city name as input (default Detroit), returns the forcast
+    !help - shows this help message
+    !joke - A joke! lol!
+    '''
+    await message.channel.send(help)
 
 async def sendWeather(message):
     # check if a city is set
