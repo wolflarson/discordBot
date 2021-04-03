@@ -49,11 +49,11 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content == '!gg':
+    if message.content.startswith( '!gg' ):
         logger.info(str(message.author) + " is running !gg on " + str(message.guild))
         await message.channel.send("gg")
 
-    if message.content == '!help':
+    if message.content.startswith( '!help' ):
         logger.info(str(message.author) + " is running !help on " + str(message.guild))
         await message.channel.send(await showHelp())
 

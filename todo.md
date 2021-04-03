@@ -2,7 +2,6 @@
 
 ## global
 
-- right now the command can be anywhere in the string. we should check that the message starts with a '!'
 - we should have a way to test every command quickly.
 ## !play
 
