@@ -2,9 +2,6 @@
 
 import os
 import random
-import json
-import aiohttp
-import asyncio
 
 #https://discordpy.readthedocs.io/en/latest/logging.html
 import logging
@@ -22,21 +19,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = "iojumper"
 client = discord.Client()
 
-async def gg(message):
-	await message.channel.send("gg no re")
-
-async def sendJoke(message):
-    async with aiohttp.ClientSession() as session:
-        jokeBaseURL = "https://api.chucknorris.io/jokes/random"
-        # https://api.chucknorris.io/jokes/random [value]
-        # https://icanhazdadjoke.com/ [joke] set header to "Accept: application/json"
-        async with session.get(jokeBaseURL) as resp:
-            getJokeObject = await resp.text()
-            getJokeAsJSON = json.loads(getJokeObject)
-#  this space needs to be here or it breaks lol wtf
-    await message.channel.send(getJokeAsJSON["value"])
-
-async def showHelp(message):
+async def showHelp():
     # this list should be alphabetical
     help = '''currently supported commands are.
     !gg   - returns gg
@@ -44,39 +27,7 @@ async def showHelp(message):
     !joke - A joke! lol!
     !weather - takes a city name as input (default Detroit), returns the forcast
     '''
-    await message.channel.send(help)
-
-async def sendWeather(message):
-    # check if a city is set
-    messageList = message.content.split(" ")
-    isCitySet = len(messageList)
-    logger.info("message length is " + str(isCitySet))
-    if isCitySet > 1:
-        city = message.content.split(" ")[1]
-        logger.info("city set to" + city)
-    else:
-        city = "detroit"
-        logger.info("city set to" + city)
-
-    # create an empty string to hold the weather report
-    weather = ""
-    headers = {'content-type': 'text/plain'}
-    async with aiohttp.ClientSession() as session:
-        weatherBaseURL = "http://wttr.in/" + str(city) + "?T"
-        # gather the full weather rport, split it line by line then just grab the first 6 lines
-        async with session.get(weatherBaseURL,headers=headers) as resp:
-            fullWeatherReport = await resp.text()
-            split = fullWeatherReport.splitlines()
-            count = 0
-            for i in split:
-                # this is the same as weather = weather + i in case I forget cuz I'm dumb
-                weather += i
-                weather += "\n"
-                count += 1
-                if count > 6:
-                    break
-    await message.channel.send(weather)
-
+    return help
 
 @client.event
 async def on_ready():
@@ -94,24 +45,27 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    # ideally we want to do all the discord ineractions here. just return the value we are going to send
     if message.author == client.user:
         return
 
     if message.content == '!gg':
         logger.info(str(message.author) + " is running !gg on " + str(message.guild))
-        await gg(message)
+        await message.channel.send("gg")
 
     if message.content == '!help':
         logger.info(str(message.author) + " is running !help on " + str(message.guild))
-        await showHelp(message)
+        await message.channel.send(await showHelp())
 
     if message.content.startswith( '!weather' ):
         logger.info(str(message.author) + " is running !weather on " + str(message.guild))
-        await sendWeather(message)
+        from misc import sendWeather
+        await message.channel.send(await sendWeather(message))
 
     if message.content.startswith( '!joke' ):
         logger.info(str(message.author) + " is running !joke on " + str(message.guild))
-        await sendJoke(message)
+        from misc import sendJoke
+        await message.channel.send(await sendJoke(message))
 
 logger.warning('hi')
 client.run(TOKEN)
