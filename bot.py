@@ -31,7 +31,7 @@ async def sendJoke(message):
         async with session.get(jokeBaseURL) as resp:
             getJokeObject = await resp.text()
             getJokeAsJSON = json.loads(getJokeObject)
-
+#  this space needs to be here or it breaks lol wtf
     await message.channel.send(getJokeAsJSON["value"])
 
 async def showHelp(message):
@@ -96,19 +96,19 @@ async def on_message(message):
         return
 
     if message.content == '!gg':
-        logger.info(str(message.author) + " is running !gg")
+        logger.info(str(message.author) + " is running !gg on " + str(message.guild))
         await gg(message)
 
     if message.content == '!help':
-        logger.info(str(message.author) + " is running !help")
+        logger.info(str(message.author) + " is running !help on " + str(message.guild))
         await showHelp(message)
 
     if message.content.startswith( '!weather' ):
-        logger.info(str(message.author) + " is running !weather")
+        logger.info(str(message.author) + " is running !weather on " + str(message.guild))
         await sendWeather(message)
 
     if message.content.startswith( '!joke' ):
-        logger.info(str(message.author) + " is running !joke")
+        logger.info(str(message.author) + " is running !joke on " + str(message.guild))
         await sendJoke(message)
 
 logger.warning('hi')
