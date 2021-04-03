@@ -28,6 +28,8 @@ async def gg(message):
 async def sendJoke(message):
     async with aiohttp.ClientSession() as session:
         jokeBaseURL = "https://api.chucknorris.io/jokes/random"
+        # https://api.chucknorris.io/jokes/random [value]
+        # https://icanhazdadjoke.com/ [joke] set header to "Accept: application/json"
         async with session.get(jokeBaseURL) as resp:
             getJokeObject = await resp.text()
             getJokeAsJSON = json.loads(getJokeObject)
