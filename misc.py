@@ -25,17 +25,17 @@ async def sendWeather(message):
     weather = ""
     headers = {'content-type': 'text/plain'}
     async with aiohttp.ClientSession() as session:
-        weatherBaseURL = "http://wttr.in/" + str(city) + "?T"
+        weatherBaseURL = "http://wttr.in/" + str(city) + "?format=3"  #?T would remove color
         # gather the full weather rport, split it line by line then just grab the first 6 lines
         async with session.get(weatherBaseURL,headers=headers) as resp:
             fullWeatherReport = await resp.text()
-            split = fullWeatherReport.splitlines()
-            count = 0
-            for i in split:
-                # this is the same as weather = weather + i in case I forget cuz I'm dumb
-                weather += i
-                weather += "\n"
-                count += 1
-                if count > 6:
-                    break
-    return weather
+            # split = fullWeatherReport.splitlines()
+            # count = 0
+            # for i in split:
+            #     # this is the same as weather = weather + i in case I forget cuz I'm dumb
+            #     weather += i
+            #     weather += "\n"
+            #     count += 1
+            #     if count > 6:
+            #         break
+    return fullWeatherReport

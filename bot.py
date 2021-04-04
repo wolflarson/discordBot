@@ -2,6 +2,7 @@
 
 import os
 import random
+import argparse
 
 #https://discordpy.readthedocs.io/en/latest/logging.html
 import logging
@@ -15,7 +16,6 @@ import discord
 from dotenv import load_dotenv
 
 load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = "iojumper"
 client = discord.Client()
 
@@ -67,5 +67,19 @@ async def on_message(message):
         from misc import sendJoke
         await message.channel.send(await sendJoke(message))
 
-logger.warning('hi')
+parser = argparse.ArgumentParser()
+parser.add_argument("-t", "--token", help="discord bot token", type=str)
+args = parser.parse_args()
+# a discord bot token is required for this app to work
+if args.token:
+    TOKEN = args.token
+    logger.info("discord token gathered from argument -t.")
+elif os.getenv('DISCORD_TOKEN'):
+    TOKEN = os.getenv('DISCORD_TOKEN')
+    logger.info("discord token gathered from env variable.")
+else:
+    print("No token for discord bot was found. Check -h for help")
+    logger.error("No token found.")
+    exit()
+
 client.run(TOKEN)
