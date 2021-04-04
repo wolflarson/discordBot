@@ -3,6 +3,7 @@
 ## global
 
 - we should have a way to test every command quickly.
+- we should support command line input of the token so that windblows users can use it.
 ## !play
 
 - some commands might be !play youbue.com?asdfadf" this would play audio
@@ -18,3 +19,16 @@
 ## google
 
 - !google <string> drops the first link in the response from google in chat
+
+## idle timer
+
+- !last <username> track how long it has been since a user was active in the server (voice or text) and report that with a
+
+## admin features
+
+to do this we need to learn how to check the role of the requester.
+ - !kick
+ - !ban
+ - !unban
+ - !mute
+ - !unmute
