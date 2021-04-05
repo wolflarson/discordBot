@@ -14,6 +14,7 @@ logger.addHandler(handler)
 
 import discord
 from dotenv import load_dotenv
+import misc
 
 load_dotenv()
 GUILD = "iojumper"
@@ -22,10 +23,11 @@ client = discord.Client()
 async def showHelp():
     # this list should be alphabetical
     help = '''currently supported commands are.
-    !gg   - returns gg
+    !gg  - returns gg
+    !google <term> - returns the first link from the google search
     !help - shows this help message
     !joke - A joke! lol!
-    !weather - takes a city name as input (default Detroit), returns the forcast
+    !weather <city> - returns the current weather. can be an important location.
     '''
     return help
 
@@ -59,13 +61,15 @@ async def on_message(message):
 
     if message.content.startswith( '!weather' ):
         logger.info(str(message.author) + " is running !weather on " + str(message.guild))
-        from misc import sendWeather
-        await message.channel.send(await sendWeather(message))
+        await message.channel.send(await misc.sendWeather(message))
 
     if message.content.startswith( '!joke' ):
         logger.info(str(message.author) + " is running !joke on " + str(message.guild))
-        from misc import sendJoke
-        await message.channel.send(await sendJoke(message))
+        await message.channel.send(await misc.sendJoke(message))
+
+    if message.content.startswith( '!google' ):
+        logger.info(str(message.author) + " is running !google on " + str(message.guild))
+        await message.channel.send(await misc.googleSearch(message))
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-t", "--token", help="discord bot token", type=str)

@@ -1,6 +1,45 @@
+import json
+import aiohttp
+from html.parser import HTMLParser
+import urllib.request
+
+class Parser(HTMLParser):
+    def __init__(self):
+        self.links = []
+        super().__init__()
+
+    def handle_starttag(self, tag, attrs):
+        listOfLinks = ""
+        # Only parse the 'anchor' tag.
+        if tag == "a":
+            for name,link in attrs:
+                if name == "href" and link.startswith("http") and not "google" in link:
+                    self.links.append(link)
+
+async def googleSearch(message):
+    # basically right from https://www.askpython.com/python-modules/htmlparser-in-python
+    baseURL = "https://www.google.com/search?q="
+    UserInput = message.content
+    UserInputStripCommand = UserInput.replace("!google ", "")
+    userSearch = UserInputStripCommand.replace(" ", "+")
+    url = baseURL + userSearch
+    req = urllib.request.Request(
+        url,
+        data=None,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0'
+        }
+    )
+    #Import HTML from a URL
+    url = urllib.request.urlopen(req)
+    fullHTML = url.read().decode()
+    url.close()
+
+    parser = Parser()
+    parser.feed(fullHTML)
+    return parser.links[0]
+
 async def sendJoke(message):
-    import json
-    import aiohttp
     async with aiohttp.ClientSession() as session:
         jokeBaseURL = "https://api.chucknorris.io/jokes/random"
         # https://api.chucknorris.io/jokes/random [value]
@@ -12,7 +51,6 @@ async def sendJoke(message):
     return getJokeAsJSON["value"]
 
 async def sendWeather(message):
-    import aiohttp
     # check if a city is set
     messageList = message.content.split(" ")
     isCitySet = len(messageList)
@@ -22,13 +60,14 @@ async def sendWeather(message):
         city = "detroit"
 
     # create an empty string to hold the weather report
-    weather = ""
+    #weather = ""
     headers = {'content-type': 'text/plain'}
     async with aiohttp.ClientSession() as session:
         weatherBaseURL = "http://wttr.in/" + str(city) + "?format=3"  #?T would remove color
         # gather the full weather rport, split it line by line then just grab the first 6 lines
         async with session.get(weatherBaseURL,headers=headers) as resp:
             fullWeatherReport = await resp.text()
+            # this was required when we pulled the ASII art but discord butchers it so we changed the format for now
             # split = fullWeatherReport.splitlines()
             # count = 0
             # for i in split:
