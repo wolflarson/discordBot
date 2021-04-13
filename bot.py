@@ -28,6 +28,7 @@ async def showHelp():
     !help - shows this help message
     !joke - A joke! lol!
     !weather <city> - returns the current weather. can be an important location.
+    !btc - lists the current bitcoin price
     '''
     return help
 
@@ -71,6 +72,10 @@ async def on_message(message):
         logger.info(str(message.author) + " is running !google on " + str(message.guild))
         await message.channel.send(await misc.googleSearch(message))
 
+    if message.content.startswith( '!btc' ):
+        logger.info(str(message.author) + " is running !btc on " + str(message.guild))
+        await message.channel.send(await misc.btc())
+
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
@@ -89,4 +94,5 @@ if __name__ == "__main__":
             exit()
         client.run(TOKEN)
     except KeyboardInterrupt:
-        sys.exit(1)
+        print("Exiting",flush=True)
+        sys.exit(0)

@@ -78,3 +78,14 @@ async def sendWeather(message):
             #     if count > 6:
             #         break
     return fullWeatherReport
+
+async def btc():
+    price = ""
+    async with aiohttp.ClientSession() as session:
+        url = "https://api.coingecko.com/api/v3/coins/bitcoin?localization=en&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false"
+        async with session.get(url) as resp:
+            htmlResponse = await resp.text()
+            getBTCAsJSON = json.loads(htmlResponse)
+            price = getBTCAsJSON['tickers'][9]['market']['name'] + " $" +str(getBTCAsJSON['tickers'][9]['last'])
+
+    return(price)
