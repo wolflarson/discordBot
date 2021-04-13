@@ -71,19 +71,22 @@ async def on_message(message):
         logger.info(str(message.author) + " is running !google on " + str(message.guild))
         await message.channel.send(await misc.googleSearch(message))
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-t", "--token", help="discord bot token", type=str)
-args = parser.parse_args()
-# a discord bot token is required for this app to work
-if args.token:
-    TOKEN = args.token
-    logger.info("discord token gathered from argument -t.")
-elif os.getenv('DISCORD_TOKEN'):
-    TOKEN = os.getenv('DISCORD_TOKEN')
-    logger.info("discord token gathered from env variable.")
-else:
-    print("No token for discord bot was found. Check -h for help")
-    logger.error("No token found.")
-    exit()
-
-client.run(TOKEN)
+if __name__ == "__main__":
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-t", "--token", help="discord bot token", type=str)
+        args = parser.parse_args()
+        # a discord bot token is required for this app to work
+        if args.token:
+            TOKEN = args.token
+            logger.info("discord token gathered from argument -t.")
+        elif os.getenv('DISCORD_TOKEN'):
+            TOKEN = os.getenv('DISCORD_TOKEN')
+            logger.info("discord token gathered from env variable.")
+        else:
+            print("No token for discord bot was found. Check -h for help")
+            logger.error("No token found.")
+            exit()
+        client.run(TOKEN)
+    except KeyboardInterrupt:
+        sys.exit(1)
