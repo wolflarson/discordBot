@@ -86,6 +86,9 @@ async def btc():
         async with session.get(url) as resp:
             htmlResponse = await resp.text()
             getBTCAsJSON = json.loads(htmlResponse)
-            price = getBTCAsJSON['tickers'][9]['market']['name'] + " $" +str(getBTCAsJSON['tickers'][9]['last'])
+            price = getBTCAsJSON['tickers'][9]['market']['name'] + " $" + str(getBTCAsJSON['tickers'][9]['last'])
+            for item in getBTCAsJSON.get('tickers',[]):
+                if item['market']['identifier'] == 'gdax' and item['trade_url'] == "https://pro.coinbase.com/trade/BTC-USD":
+                    price = item['market']['name'] + " $" + str(item['last'])
 
     return(price)

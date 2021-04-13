@@ -38,7 +38,9 @@
 
 ## !btc
 
-- give current BTC price
+- right now we have a magic number, we should find a way to get rid of that
+- We should support multiple exchanges
+- we should support converting to other currency
 
 ## !date
 
