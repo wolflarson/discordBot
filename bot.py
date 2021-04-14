@@ -3,6 +3,10 @@
 import os
 import random
 import argparse
+# cleanMessage
+import re
+# for url encoding
+import urllib.parse
 
 #https://discordpy.readthedocs.io/en/latest/logging.html
 import logging
@@ -14,6 +18,8 @@ logger.addHandler(handler)
 
 import discord
 from dotenv import load_dotenv
+
+# misc.py in the same folder as this file
 import misc
 
 load_dotenv()
@@ -23,14 +29,33 @@ client = discord.Client()
 async def showHelp():
     # this list should be alphabetical
     help = '''currently supported commands are.
+    !btc - lists the current bitcoin price
     !gg  - returns gg
     !google <term> - returns the first link from the google search
     !help - shows this help message
     !joke - A joke! lol!
     !weather <city> - returns the current weather. can be an important location.
-    !btc - lists the current bitcoin price
     '''
     return help
+
+async def cleanMessage(message, positionsToReturn):
+    #positionsToReturn should be 0 = the entire message without the command returned,1 = first word without the command
+    #only allow a-z A-Z 0-9
+    message = re.sub(r"[^a-zA-Z0-9 ]","",message)
+    messageArray = message.split(" ")
+    # remove the command
+    del messageArray[0]
+    if int(positionsToReturn) == 0:
+        # return the entire thing
+        message = ' '.join(messageArray)
+        return(message)
+
+    if int(positionsToReturn) == 1:
+        # return the first word only
+        message = ''.join(messageArray[0])
+        return(message)
+
+    #urllib.parse.quote_plus()
 
 @client.event
 async def on_ready():
@@ -56,6 +81,14 @@ async def on_message(message):
         logger.info(str(message.author) + " is running !gg on " + str(message.guild))
         await message.channel.send("gg")
 
+    if message.content.startswith( '!ping' ):
+        logger.info(str(message.author) + " is running !ping on " + str(message.guild))
+        await message.channel.send("pong")
+
+    if message.content.startswith( '!pong' ):
+        logger.info(str(message.author) + " is running !pong on " + str(message.guild))
+        await message.channel.send("ping")
+
     if message.content.startswith( '!help' ):
         logger.info(str(message.author) + " is running !help on " + str(message.guild))
         await message.channel.send(await showHelp())
@@ -70,7 +103,8 @@ async def on_message(message):
 
     if message.content.startswith( '!google' ):
         logger.info(str(message.author) + " is running !google on " + str(message.guild))
-        await message.channel.send(await misc.googleSearch(message))
+        googleSearchString = await cleanMessage(message.content, 0)
+        await message.channel.send(await misc.googleSearch(googleSearchString))
 
     if message.content.startswith( '!btc' ):
         logger.info(str(message.author) + " is running !btc on " + str(message.guild))

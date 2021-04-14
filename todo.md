@@ -28,10 +28,6 @@
 
 - !last <username> track how long it has been since a user was active in the server (voice or text) and report that with a
 
-## ping / pong
-
- - responds with pong / ping
-
 ## !hn
 
  - grabs the top news from hacker news

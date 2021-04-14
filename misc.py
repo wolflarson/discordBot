@@ -19,9 +19,7 @@ class Parser(HTMLParser):
 async def googleSearch(message):
     # basically right from https://www.askpython.com/python-modules/htmlparser-in-python
     baseURL = "https://www.google.com/search?q="
-    UserInput = message.content
-    UserInputStripCommand = UserInput.replace("!google ", "")
-    userSearch = UserInputStripCommand.replace(" ", "+")
+    userSearch = message.replace(" ", "+")
     url = baseURL + userSearch
     req = urllib.request.Request(
         url,
