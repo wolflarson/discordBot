@@ -99,7 +99,7 @@ async def on_message(message):
 
     if message.content.startswith( '!joke' ):
         logger.info(str(message.author) + " is running !joke on " + str(message.guild))
-        await message.channel.send(await misc.sendJoke(message))
+        await message.channel.send(await misc.sendJoke())
 
     if message.content.startswith( '!google' ):
         logger.info(str(message.author) + " is running !google on " + str(message.guild))

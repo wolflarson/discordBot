@@ -37,7 +37,7 @@ async def googleSearch(message):
     parser.feed(fullHTML)
     return parser.links[0]
 
-async def sendJoke(message):
+async def sendJoke():
     async with aiohttp.ClientSession() as session:
         jokeBaseURL = "https://api.chucknorris.io/jokes/random"
         # https://api.chucknorris.io/jokes/random [value]
