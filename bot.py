@@ -1,6 +1,7 @@
 #!/bin/python
 
 import os
+import datetime
 import random
 import argparse
 # cleanMessage
@@ -9,10 +10,14 @@ import re
 import urllib.parse
 
 #https://discordpy.readthedocs.io/en/latest/logging.html
+if os.path.isfile('logs/discord.log'):
+    Current_Date = datetime.datetime.today().strftime ('%d-%m-%Y %I:%M:%S')
+    os.rename(r'logs/discord.log',r'logs/discord-' + str(Current_Date) + '.log')
+
 import logging
-logger = logging.getLogger('discord')
+logger = logging.getLogger('logs/discord')
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename='logs/discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
