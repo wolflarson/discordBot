@@ -3,7 +3,7 @@
 ## global
 
 - we should have a way to test every command quickly.
-- we need to do more input validation. url encode everything I think.
+- fix logs so that we rotate rather than erasing the whole file every time
 ## !play
 
 - some commands might be !play youbue.com?asdfadf" this would play audio
@@ -19,12 +19,11 @@
 
 ## !google
 
-- we need to do some input validation perhaps urlencode?
 ## !ddg
 
 - !ddg <string> drops the first link in the response from duckduckgo in the chat
 
-## idle timer
+## !last - idle timer
 
 - !last <username> track how long it has been since a user was active in the server (voice or text) and report that with a
 
@@ -34,7 +33,6 @@
 
 ## !btc
 
-- right now we have a magic number, we should find a way to get rid of that
 - We should support multiple exchanges
 - we should support converting to other currency
 
