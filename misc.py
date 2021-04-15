@@ -52,13 +52,10 @@ async def sendJoke():
     return getJokeAsJSON["value"]
 
 async def sendWeather(message):
-    # check if a city is set
-    messageList = message.content.split(" ")
-    isCitySet = len(messageList)
-    if isCitySet > 1:
-        city = message.content.split(" ")[1]
-    else:
+    if message == "none":
         city = "detroit"
+    else:
+        city = message
 
     # create an empty string to hold the weather report
     #weather = ""
