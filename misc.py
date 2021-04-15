@@ -17,6 +17,9 @@ class Parser(HTMLParser):
                     self.links.append(link)
 
 async def googleSearch(message):
+    if message == "":
+        return("Check !help")
+
     # basically right from https://www.askpython.com/python-modules/htmlparser-in-python
     baseURL = "https://www.google.com/search?q="
     userSearch = message.replace(" ", "+")
