@@ -51,9 +51,13 @@ async def cleanMessage(message, positionsToReturn):
         return(message)
 
     if int(positionsToReturn) == 1:
-        # return the first word only
-        message = ''.join(messageArray[0])
-        return(message)
+        numberOfWords = len(messageArray)
+        if numberOfWords == 0:
+            return("none")
+        else:
+            # return the first word only
+            message = ''.join(messageArray[0])
+            return(message)
 
     #urllib.parse.quote_plus()
 
@@ -95,7 +99,8 @@ async def on_message(message):
 
     if message.content.startswith( '!weather' ):
         logger.info(str(message.author) + " is running !weather on " + str(message.guild))
-        await message.channel.send(await misc.sendWeather(message))
+        cityForWeather = await cleanMessage(message.content, 1)
+        await message.channel.send(await misc.sendWeather(cityForWeather))
 
     if message.content.startswith( '!joke' ):
         logger.info(str(message.author) + " is running !joke on " + str(message.guild))
