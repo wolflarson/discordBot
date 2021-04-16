@@ -120,6 +120,11 @@ async def on_message(message):
         logger.info(str(message.author) + " is running !btc on " + str(message.guild))
         await message.channel.send(await misc.btc())
 
+    if message.content.startswith( '!ddg' ):
+        logger.info(str(message.author) + " is running !ddg on " + str(message.guild))
+        ddgMessageContent = await cleanMessage(message.content, 0)
+        await message.channel.send(await misc.ddgSearch(ddgMessageContent))
+
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()

@@ -3,7 +3,7 @@
 ## global
 
 - we should have a way to test every command quickly.
-- fix logs so that we rotate rather than erasing the whole file every time
+- logging just count to 30 rename all olderilse by one and delete any over 30.  stat the file and grab the timestapm from when it was creatdd and use that instead of now()
 ## !play
 
 - some commands might be !play youbue.com?asdfadf" this would play audio
@@ -22,6 +22,7 @@
 ## !ddg
 
 - !ddg <string> drops the first link in the response from duckduckgo in the chat
+ - this is not working. it seems they encode the results in the html to prevent exactly what I'm doing. needs more looging into
 
 ## !last - idle timer
 
@@ -43,6 +44,10 @@
 ## !hello
 
  - sends a compliment to the person who sent the message. (Call them out by name.)
+
+## !yt
+
+ - searches youtube
 ## admin features
 
 to do this we need to learn how to check the role of the requester.

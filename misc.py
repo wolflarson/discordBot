@@ -40,6 +40,30 @@ async def googleSearch(message):
     parser.feed(fullHTML)
     return parser.links[0]
 
+async def ddgSearch(message):
+    if message == "":
+        return("Check !help")
+
+    baseURL = "https://duckduckgo.com/?q="
+    userSearch = message.replace(" ", "+")
+    url = baseURL + userSearch
+    req = urllib.request.Request(
+        url,
+        data=None,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0'
+        }
+    )
+    #Import HTML from a URL
+    url = urllib.request.urlopen(req)
+    fullHTML = url.read().decode()
+    url.close()
+    print(fullHTML)
+    parser = Parser()
+    parser.feed(fullHTML)
+    # return parser.links[0]
+    return("ddg's webpages are a mess. this needs work")
+
 async def sendJoke():
     async with aiohttp.ClientSession() as session:
         jokeBaseURL = "https://api.chucknorris.io/jokes/random"
