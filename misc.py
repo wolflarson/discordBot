@@ -1,3 +1,4 @@
+import os
 import json
 import aiohttp
 from html.parser import HTMLParser
@@ -6,15 +7,26 @@ import urllib.request
 class Parser(HTMLParser):
     def __init__(self):
         self.links = []
+        self.img = []
+        self.dataurl = []
         super().__init__()
 
     def handle_starttag(self, tag, attrs):
-        listOfLinks = ""
         # Only parse the 'anchor' tag.
         if tag == "a":
             for name,link in attrs:
                 if name == "href" and link.startswith("http") and not "google" in link:
                     self.links.append(link)
+
+        if tag == "img":
+            for name,link in attrs:
+                if name == "src" and link.startswith("http"):
+                    self.img.append(img)
+
+        if tag == "div":
+            for name,dataurl in attrs:
+                if name == "data-url" and dataurl.startswith("https://i.redd.it"):
+                    self.dataurl.append(dataurl)
 
 async def googleSearch(message):
     if message == "":
@@ -81,8 +93,6 @@ async def sendWeather(message):
     else:
         city = message
 
-    # create an empty string to hold the weather report
-    #weather = ""
     headers = {'content-type': 'text/plain'}
     async with aiohttp.ClientSession() as session:
         weatherBaseURL = "http://wttr.in/" + str(city) + "?format=3"  #?T would remove color
@@ -113,3 +123,51 @@ async def btc():
                     price = item['market']['name'] + " $" + str(item['last'])
 
     return(price)
+
+async def img():
+    imageLocation = "img/278841.jpg"
+    return(imageLocation)
+
+async def selectEarthPornImage():
+    baseURL = "https://old.reddit.com/r/EarthPorn/"
+    url = baseURL
+    req = urllib.request.Request(
+        url,
+        data=None,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'
+        }
+    )
+    #Import HTML from a URL
+    url = urllib.request.urlopen(req)
+    fullHTML = url.read().decode()
+    url.close()
+
+    parser = Parser()
+    parser.feed(fullHTML)
+    return parser.dataurl[1]
+
+async def downloadImage(url):
+    urlParts = url.split("/",-1)
+    imageName = urlParts[-1]
+    imageStorageLocation = "img/"
+    if url == "":
+        print("Error: you need to send me a url to download.")
+        return
+
+    if os.path.isfile(imageStorageLocation+imageName):
+        print("file already exists")
+        return imageStorageLocation+imageName
+    else:
+        req = urllib.request.Request(
+            url,
+            data=None,
+            headers={
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'
+            }
+        )
+        image = urllib.request.urlopen(req).read()
+        f = open(imageStorageLocation+imageName,'wb')
+        f.write(image)
+        f.close()
+        return imageStorageLocation+imageName

@@ -35,6 +35,7 @@ async def showHelp():
     # this list should be alphabetical
     help = '''currently supported commands are.
     !btc - lists the current bitcoin price
+    !earthporn - returns the top image on /r/earthporn
     !gg  - returns gg
     !google <term> - returns the first link from the google search
     !help - shows this help message
@@ -124,6 +125,10 @@ async def on_message(message):
         logger.info(str(message.author) + " is running !ddg on " + str(message.guild))
         ddgMessageContent = await cleanMessage(message.content, 0)
         await message.channel.send(await misc.ddgSearch(ddgMessageContent))
+
+    if message.content.startswith( '!earthporn' ):
+        logger.info(str(message.author) + " is running !earthporn on " + str(message.guild))
+        await message.channel.send(file=discord.File(await misc.downloadImage(await misc.selectEarthPornImage())))
 
 if __name__ == "__main__":
     try:
