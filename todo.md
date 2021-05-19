@@ -1,10 +1,11 @@
 # ToDo
 
+Add a list unde the command of what needs to be done. Once you finish something just remove the line. This is not a readme.
 ## global
 
 - we should have a way to test every command quickly.
 - logging: just count to 30 rename all older files by one and delete any over 30.  stat the file and grab the timestapm from when it was creatdd and use that instead of now()
-- we should catch ctrl+c (exit) and rotate the log file at close?
+- we should catch ctrl+c (exit) and exit more cleanly (ie kill all our children, close file handlers etc)?
 ## !play
 
 - some commands might be !play youbue.com?asdfadf" this would play audio
@@ -13,8 +14,6 @@
 - we should have an array of types of jokes it can send. currently only chuck norris jokes are supported
 - some of the joke apis have search features. we could search for a string with a sub command !joke search <term>
 ## !earthporn
-
-- !earthporn will grab a top photo from /r/earthporn and post it in chat. the image not just the link
 
 ## !google
 
