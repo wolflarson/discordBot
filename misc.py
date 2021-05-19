@@ -140,16 +140,7 @@ async def downloadImage(url):
     urlParts = url.split("/",-1)
     imageName = urlParts[-1]
     imageStorageLocation = "img/"
-    count=0
-    maxCount=100
-    # https://www.askpython.com/python/examples/python-directory-listing
-    listOfImageFiles = [os.path.join(imageStorageLocation, file) for file in os.listdir(imageStorageLocation)]
-    if len(listOfImageFiles) > 100:
-        print("More than 100 images. Cleaning up.")
-        oldestFile = min(listOfImageFiles, key=os.path.getctime)
-        print(oldestFile)
-        os.remove(os.path.abspath(oldestFile))
-        print("Deleted " + oldestFile)
+    folderCleanup(100, imageStorageLocation)
 
     if url == "":
         print("Error: you need to send me a url to download.")
@@ -171,3 +162,13 @@ async def downloadImage(url):
         f.write(image)
         f.close()
         return imageStorageLocation+imageName
+
+def folderCleanup(maxCount, path):
+    # https://www.askpython.com/python/examples/python-directory-listing
+    listOfFiles = [os.path.join(path, file) for file in os.listdir(path)]
+    while len(listOfFiles) > maxCount:
+        print("More than " + maxCount + " images. Cleaning up.")
+        oldestFile = min(listOfFiles, key=os.path.getctime)
+        print(oldestFile)
+        os.remove(os.path.abspath(oldestFile))
+        print("Deleted " + oldestFile)

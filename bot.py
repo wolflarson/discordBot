@@ -8,24 +8,23 @@ import argparse
 import re
 # for url encoding
 import urllib.parse
-
-#https://discordpy.readthedocs.io/en/latest/logging.html
-if os.path.isfile('logs/discord.log'):
-    Current_Date = datetime.datetime.today().strftime ('%d-%m-%Y %I:%M:%S')
-    os.rename(r'logs/discord.log',r'logs/discord-' + str(Current_Date) + '.log')
-
-import logging
-logger = logging.getLogger('logs/discord')
-logger.setLevel(logging.INFO)
-handler = logging.FileHandler(filename='logs/discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
-
-import discord
-from dotenv import load_dotenv
+import sys
 
 # misc.py in the same folder as this file
 import misc
+
+#https://discordpy.readthedocs.io/en/latest/logging.html
+import logging
+logger = logging.getLogger('logs/discord')
+logger.setLevel(logging.INFO)
+Current_Date = datetime.datetime.today().strftime ('%d-%m-%Y %I:%M:%S')
+handler = logging.FileHandler(filename='logs/discord' + str(Current_Date) + '.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+misc.folderCleanup(100, "logs/")
+
+import discord
+from dotenv import load_dotenv
 
 load_dotenv()
 client = discord.Client()

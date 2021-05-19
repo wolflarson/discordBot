@@ -3,7 +3,8 @@
 ## global
 
 - we should have a way to test every command quickly.
-- logging just count to 30 rename all olderilse by one and delete any over 30.  stat the file and grab the timestapm from when it was creatdd and use that instead of now()
+- logging: just count to 30 rename all older files by one and delete any over 30.  stat the file and grab the timestapm from when it was creatdd and use that instead of now()
+- we should catch ctrl+c (exit) and rotate the log file at close?
 ## !play
 
 - some commands might be !play youbue.com?asdfadf" this would play audio
