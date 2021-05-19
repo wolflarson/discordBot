@@ -15,6 +15,14 @@ import misc
 
 #https://discordpy.readthedocs.io/en/latest/logging.html
 import logging
+# Configure logging
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+Current_Date = datetime.datetime.today().strftime ('%d-%m-%Y %I:%M:%S')
+handler = logging.FileHandler(filename='logs/discord' + str(Current_Date) + '.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+misc.folderCleanup(100, "logs/")
 
 import discord
 from dotenv import load_dotenv
@@ -121,17 +129,8 @@ async def on_message(message):
         logger.info(str(message.author) + " is running !earthporn on " + str(message.guild))
         await message.channel.send(file=discord.File(await misc.downloadImage(await misc.selectEarthPornImage())))
 
-if __name__ == "__main__":
+def main():
     try:
-        # Configure logging
-        logger = logging.getLogger('discord')
-        logger.setLevel(logging.INFO)
-        Current_Date = datetime.datetime.today().strftime ('%d-%m-%Y %I:%M:%S')
-        handler = logging.FileHandler(filename='logs/discord' + str(Current_Date) + '.log', encoding='utf-8', mode='w')
-        handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-        logger.addHandler(handler)
-        misc.folderCleanup(100, "logs/")
-
         parser = argparse.ArgumentParser()
         parser.add_argument("-t", "--token", help="discord bot token", type=str)
         args = parser.parse_args()
@@ -150,3 +149,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Exiting",flush=True)
         sys.exit(0)
+
+if __name__ == "__main__":
+    main()
