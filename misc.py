@@ -3,7 +3,8 @@ import json
 import aiohttp
 from html.parser import HTMLParser
 import urllib.request
-
+import logging
+logger = logging.getLogger('discord')
 class Parser(HTMLParser):
     def __init__(self):
         self.links = []
@@ -64,7 +65,6 @@ async def ddgSearch(message):
     url = urllib.request.urlopen(req)
     fullHTML = url.read().decode()
     url.close()
-    print(fullHTML)
     parser = Parser()
     parser.feed(fullHTML)
     # return parser.links[0]
@@ -143,11 +143,11 @@ async def downloadImage(url):
     folderCleanup(100, imageStorageLocation)
 
     if url == "":
-        print("Error: you need to send me a url to download.")
+        logger.info("downloadImage: You need to send me a url to download.")
         return
 
     if os.path.isfile(imageStorageLocation+imageName):
-        print("file already exists")
+        logger.info("downloadImage: File already exists")
         return imageStorageLocation+imageName
     else:
         req = urllib.request.Request(
@@ -167,8 +167,7 @@ def folderCleanup(maxCount, path):
     # https://www.askpython.com/python/examples/python-directory-listing
     listOfFiles = [os.path.join(path, file) for file in os.listdir(path)]
     while len(listOfFiles) > maxCount:
-        print("More than " + maxCount + " images. Cleaning up.")
+        logger.info("folderCleanup: More than " + maxCount + " images. Cleaning up.")
         oldestFile = min(listOfFiles, key=os.path.getctime)
-        print(oldestFile)
         os.remove(os.path.abspath(oldestFile))
-        print("Deleted " + oldestFile)
+        logger.info("folderCleanup: Deleted " + oldestFile)
