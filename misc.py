@@ -7,7 +7,6 @@ import urllib.request
 class Parser(HTMLParser):
     def __init__(self):
         self.links = []
-        self.img = []
         self.dataurl = []
         super().__init__()
 
@@ -17,11 +16,6 @@ class Parser(HTMLParser):
             for name,link in attrs:
                 if name == "href" and link.startswith("http") and not "google" in link:
                     self.links.append(link)
-
-        if tag == "img":
-            for name,link in attrs:
-                if name == "src" and link.startswith("http"):
-                    self.img.append(img)
 
         if tag == "div":
             for name,dataurl in attrs:
@@ -40,7 +34,7 @@ async def googleSearch(message):
         url,
         data=None,
         headers={
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0'
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'
         }
     )
     #Import HTML from a URL
@@ -63,7 +57,7 @@ async def ddgSearch(message):
         url,
         data=None,
         headers={
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0'
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'
         }
     )
     #Import HTML from a URL
@@ -124,13 +118,8 @@ async def btc():
 
     return(price)
 
-async def img():
-    imageLocation = "img/278841.jpg"
-    return(imageLocation)
-
 async def selectEarthPornImage():
-    baseURL = "https://old.reddit.com/r/EarthPorn/"
-    url = baseURL
+    url = "https://old.reddit.com/r/EarthPorn/"
     req = urllib.request.Request(
         url,
         data=None,
@@ -151,6 +140,17 @@ async def downloadImage(url):
     urlParts = url.split("/",-1)
     imageName = urlParts[-1]
     imageStorageLocation = "img/"
+    count=0
+    maxCount=100
+    # https://www.askpython.com/python/examples/python-directory-listing
+    listOfImageFiles = [os.path.join(imageStorageLocation, file) for file in os.listdir(imageStorageLocation)]
+    if len(listOfImageFiles) > 100:
+        print("More than 100 images. Cleaning up.")
+        oldestFile = min(listOfImageFiles, key=os.path.getctime)
+        print(oldestFile)
+        os.remove(os.path.abspath(oldestFile))
+        print("Deleted " + oldestFile)
+
     if url == "":
         print("Error: you need to send me a url to download.")
         return

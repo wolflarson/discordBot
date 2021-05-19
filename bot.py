@@ -28,7 +28,6 @@ from dotenv import load_dotenv
 import misc
 
 load_dotenv()
-GUILD = "iojumper"
 client = discord.Client()
 
 async def showHelp():
@@ -45,7 +44,7 @@ async def showHelp():
     return help
 
 async def cleanMessage(message, positionsToReturn):
-    #positionsToReturn should be 0 = the entire message without the command returned,1 = first word without the command
+    #positionsToReturn should be 0 = the entire message without the command returned,1 = first word after the command
     #only allow a-z A-Z 0-9
     message = re.sub(r"[^a-zA-Z0-9 ]","",message)
     messageArray = message.split(" ")

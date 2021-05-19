@@ -15,8 +15,6 @@
 
 - !earthporn will grab a top photo from /r/earthporn and post it in chat. the image not just the link
 
-- it would be cool if we could figure out how to pull out the more complicated tasks into their own file. dar says we should figure out how to import them like a module.
-
 ## !google
 
 ## !ddg
